@@ -1,19 +1,13 @@
 import numpy as np
 from collections import Counter
-from sklearn.model_selection import LeaveOneOut
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import normalized_mutual_info_score
-from pycm import ConfusionMatrix
+from sklearn.model_selection import LeaveOneOut, train_test_split
+from sklearn.metrics import normalized_mutual_info_score, confusion_matrix, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
-from scipy.stats import entropy
-import numpy as np
-from sklearn.metrics import accuracy_score, normalized_mutual_info_score
-from pycm import ConfusionMatrix
 from scipy.ndimage import rotate
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 from keras.utils import to_categorical
-from sklearn.model_selection import train_test_split
+
 
 #################################
 # 计算欧氏距离、NMI (归一化互信息)、CEN (混淆熵)
@@ -22,21 +16,23 @@ def euclidean_distance(a, b):
     return np.sqrt(np.sum((a - b) ** 2))
 def calculate_nmi(labels, predictions):
     return normalized_mutual_info_score(labels, predictions)
-# 计算
-def calculate_cen(labels, predictions):
-    cm = ConfusionMatrix(actual_vector=labels, predict_vector=predictions)
-    cen = sum(cm.CEN.values()) / len(cm.CEN)
+def calculate_cen(y_true, y_pred):
+    cm = confusion_matrix(y_true, y_pred)
+    probs = cm / np.sum(cm)
+    cen = -np.nansum(probs * np.log(probs + 1e-10))
     return cen
 
-def calculate_cen1(y_true, y_pred):
-    matrix = np.zeros((10, 10))
-    for true_label, pred_label in zip(y_true, y_pred):
-        matrix[true_label][pred_label] += 1
-    matrix /= len(y_true)
-    rentropy = [entropy(row) for row in matrix if np.sum(row) > 0]
-    cen = np.mean(rentropy)
-    return cen
 
+#################################
+# 数据加载
+#################################
+def load_semeion_data(file_path):
+    data = np.loadtxt(file_path)
+    # 前256列是特征，后10列是one-hot编码的标签
+    X = data[:, :256]
+    # 将one-hot编码转换为单一的数字标签
+    y = np.argmax(data[:, 256:], axis=1)
+    return X, y
 
 
 #################################
@@ -83,14 +79,7 @@ def knn_with_loocv(data, labels, k_values):
         accuracies.append((accuracy, nmi, cen))
     return accuracies
 
-# 加载semeion.data数据集
-def load_semeion_data(file_path):
-    data = np.loadtxt(file_path)
-    # 前256列是特征，后10列是one-hot编码的标签
-    X = data[:, :256]
-    # 将one-hot编码转换为单一的数字标签
-    y = np.argmax(data[:, 256:], axis=1)
-    return X, y
+
 
 #################################
 # sklearn

@@ -121,7 +121,9 @@ def compare_with_sklearn_knn(X, y, k_values):
     return accuracies, nmis, cens
 
 
-
+#################################
+# 旋转后使用CNN进行识别
+#################################
 # 数据增强：对图像进行左上、左下旋转
 def augment_data(X, y):
     X_rotated_left_up = np.array([rotate(x.reshape(16, 16), angle=20, reshape=False).flatten() for x in X])

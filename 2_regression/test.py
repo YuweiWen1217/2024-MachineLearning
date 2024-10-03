@@ -1,6 +1,10 @@
 import numpy as np
-n = 10
-theta1 = np.zeros(n)
-print(theta1)
-theta2 = np.random.randn(n, 1)
-print(theta2)
+
+# 创建一个包含6个元素的数组
+arr = np.array([1, 2, 3, 4, 5, 6])
+
+# 将一维数组重塑为二维数组，自动计算行数
+reshaped = arr.reshape(-1)
+
+print("原数组:", arr)
+print("重新调整形状数组:", reshaped)

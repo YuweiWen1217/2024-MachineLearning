@@ -37,3 +37,8 @@ This is a repository of code related to Machine Learning course.
 1. **初级要求**：自行生成数据集，包含2000个样例，每个样例的前3列表示特征，第4列表示标签。实现single-linkage层次聚类算法；实现complete-linkage层次聚类算法。
 2. **中级要求**：实现average-linkage层次聚类算法；将上述三种算法的性能进行简要对比。
 3. **高级要求**：通过变换聚类簇的个数，测试上述三种算法的性能，并给出分析。
+
+## 实验六：决策树分类器
+1. **初级要求**：基于 Watermelon-train1数据集（只有离散属性），构造ID3决策树；基于构造的 ID3 决策树，对数据集 Watermelon-test1进行预测，输出分类精度；
+2. **中级要求**：对数据集Watermelon-train2，构造C4.5或者CART决策树，要求可以处理连续型属性；对测试集Watermelon-test2进行预测，输出分类精度；
+3. **高级要求**：使用任意的剪枝算法对构造的决策树（基本要求和中级要求构造的树）进行剪枝，观察测试集合的分类精度是否有提升，给出分析过程。
